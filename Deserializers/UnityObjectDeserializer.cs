@@ -1,7 +1,6 @@
 ﻿using AssetParser.Exceptions;
 using AssetParser.Tools;
 using AssetParser.TypeTreeUtils;
-using AssetParser.TypeTreeUtils;
 using Serde;
 using System.Buffers;
 
