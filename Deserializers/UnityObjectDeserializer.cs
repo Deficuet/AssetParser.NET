@@ -6,16 +6,10 @@ using System.Buffers;
 
 namespace AssetParser.Deserializers;
 
-public class UnityObjectDeserializer : IDeserializer
+public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode rootNode) : IDeserializer
 {
-    private readonly EndianBinaryReader reader;
-    private readonly TypeTreeNode rootNode;
-
-    internal UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode rootNode)
-    {
-        this.reader = reader;
-        this.rootNode = rootNode;
-    }
+    private readonly EndianBinaryReader reader = reader;
+    private readonly TypeTreeNode rootNode = rootNode;
 
     public ITypeDeserializer ReadType(ISerdeInfo typeInfo)
     {

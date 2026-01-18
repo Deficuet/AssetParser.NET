@@ -2,7 +2,7 @@
 
 public static class TypeTreeHelper
 {
-    internal static TypeTreeNode BuildTypeTree(List<TypeTreeNode> nodes)
+    public static TypeTreeNode BuildTypeTree(List<TypeTreeNode> nodes)
     {
         TypeTreeNode rootNode = nodes[0];
         Stack<TypeTreeNode> stack = new();
