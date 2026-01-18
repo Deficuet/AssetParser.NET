@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
+    <OutputType>Library</OutputType>
+    <StartupObject>AssetManager.MainClass</StartupObject>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Deficuet.$(AssemblyName)</PackageId>
+    <Title>Deficuet.AssetParser</Title>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>Deficuet</Authors>
+    <Company />
+    <Description>An Unity object data reader driven by the type tree and generated deserializer. Neither specialized deserialization logics nor runtime reflection are required.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Deficuet.Serde" Version="0.10.0-alpha.1" />
+  </ItemGroup>
+
+</Project>
