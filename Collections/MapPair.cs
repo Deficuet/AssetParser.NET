@@ -4,7 +4,7 @@ using Serde;
 namespace AssetParser.Collections;
 
 [SerdeTypeOptions(Proxy = typeof(MapPairProxy))]
-internal readonly struct MapPair<TFirst, TSecond>(TFirst first, TSecond second)
+public readonly struct MapPair<TFirst, TSecond>(TFirst first, TSecond second)
 {
     public readonly TFirst first = first;
     public readonly TSecond second = second;

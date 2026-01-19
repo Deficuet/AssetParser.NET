@@ -3,7 +3,7 @@ using Serde;
 
 namespace AssetParser.SerdeUtils.Map;
 
-internal static class MultiDictionaryProxy
+public static class MultiDictionaryProxy
 {
     public sealed class Ser<TK, TV, TKProvider, TVProvider>
         : ISerializeProvider<MultiDictionary<TK, TV>>, ISerialize<MultiDictionary<TK, TV>>
@@ -11,7 +11,7 @@ internal static class MultiDictionaryProxy
         where TKProvider: ISerializeProvider<TK>
         where TVProvider: ISerializeProvider<TV>
     {
-        public static ISerialize<MultiDictionary<TK, TV>> Instance { get; } = 
+        static ISerialize<MultiDictionary<TK, TV>> ISerializeProvider<MultiDictionary<TK, TV>>.Instance { get; } = 
             new Ser<TK, TV, TKProvider, TVProvider>();
 
         private readonly static MapPairSerdeInfo<TK, TV> s_pairInfo = new(
@@ -26,7 +26,7 @@ internal static class MultiDictionaryProxy
         private readonly ITypeSerialize<TK> _keySer = TypeSerialize.GetOrBox<TK, TKProvider>();
         private readonly ITypeSerialize<TV> _valSer = TypeSerialize.GetOrBox<TV, TVProvider>();
 
-        public void Serialize(MultiDictionary<TK, TV> value, ISerializer serializer)
+        void ISerialize<MultiDictionary<TK, TV>>.Serialize(MultiDictionary<TK, TV> value, ISerializer serializer)
         {
             var enumerable = serializer.WriteCollection(SerdeInfo, value.ValueCount);
             foreach (var pair in value)
@@ -57,7 +57,10 @@ internal static class MultiDictionaryProxy
     {
         public override ISerdeInfo SerdeInfo { get; } = Serde.SerdeInfo.MakeEnumerable(
             typeof(List<MapPair<TK, TV>>).ToString(),
-            MapPairProxy.De<TK, TV, TKProvider, TVProvider>.Instance.SerdeInfo
+            new MapPairSerdeInfo<TK, TV>(
+                TKProvider.Instance.SerdeInfo,
+                TVProvider.Instance.SerdeInfo
+            )
         );
 
         protected override void Add(MultiDictionary<TK, TV> builder, MapPair<TK, TV> item)

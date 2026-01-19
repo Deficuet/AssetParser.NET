@@ -3,7 +3,7 @@ using Serde;
 
 namespace AssetParser.SerdeUtils.Map;
 
-internal static class MapPairProxy
+public static class MapPairProxy
 {
     public sealed class Ser<TFirst, TSecond, TFProvider, TSProvider>
         : ISerializeProvider<MapPair<TFirst, TSecond>>, ISerialize<MapPair<TFirst, TSecond>>
@@ -11,7 +11,7 @@ internal static class MapPairProxy
         where TFProvider : ISerializeProvider<TFirst>
         where TSProvider : ISerializeProvider<TSecond>
     {
-        public static ISerialize<MapPair<TFirst, TSecond>> Instance { get; } = 
+        static ISerialize<MapPair<TFirst, TSecond>> ISerializeProvider<MapPair<TFirst, TSecond>>.Instance { get; } = 
             new Ser<TFirst, TSecond, TFProvider, TSProvider>();
 
         public ISerdeInfo SerdeInfo { get; } = new MapPairSerdeInfo<TFirst, TSecond>(
@@ -22,7 +22,7 @@ internal static class MapPairProxy
         private static readonly ITypeSerialize<TFirst> _firstSer = TypeSerialize.GetOrBox<TFirst, TFProvider>();
         private static readonly ITypeSerialize<TSecond> _secondSer = TypeSerialize.GetOrBox<TSecond, TSProvider>();
 
-        public void Serialize(MapPair<TFirst, TSecond> value, ISerializer serializer)
+        void ISerialize<MapPair<TFirst, TSecond>>.Serialize(MapPair<TFirst, TSecond> value, ISerializer serializer)
         {
             var ser = serializer.WriteType(SerdeInfo);
             _firstSer.Serialize(value.first, ser, SerdeInfo, 0);
@@ -37,7 +37,7 @@ internal static class MapPairProxy
         where TFProvider : IDeserializeProvider<TFirst>
         where TSProvider : IDeserializeProvider<TSecond>
     {
-        public static IDeserialize<MapPair<TFirst, TSecond>> Instance { get; } = 
+        static IDeserialize<MapPair<TFirst, TSecond>> IDeserializeProvider<MapPair<TFirst, TSecond>>.Instance { get; } = 
             new De<TFirst, TSecond, TFProvider, TSProvider>();
 
         public ISerdeInfo SerdeInfo { get; } = new MapPairSerdeInfo<TFirst, TSecond>(
@@ -48,7 +48,7 @@ internal static class MapPairProxy
         private static readonly ITypeDeserialize<TFirst> _firstDe = TypeDeserialize.GetOrBox<TFirst, TFProvider>();
         private static readonly ITypeDeserialize<TSecond> _secondDe = TypeDeserialize.GetOrBox<TSecond, TSProvider>();
 
-        public MapPair<TFirst, TSecond> Deserialize(IDeserializer deserializer)
+        MapPair<TFirst, TSecond> IDeserialize<MapPair<TFirst, TSecond>>.Deserialize(IDeserializer deserializer)
         {
             TFirst first = default!;
             TSecond second = default!;
