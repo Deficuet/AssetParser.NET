@@ -1,9 +1,36 @@
-﻿using Serde;
+﻿using AssetParser.Collections;
+using Serde;
 
 namespace AssetParser.SerdeUtils.Map;
 
 internal static class MapPairProxy
 {
+    public sealed class Ser<TFirst, TSecond, TFProvider, TSProvider>
+        : ISerializeProvider<MapPair<TFirst, TSecond>>, ISerialize<MapPair<TFirst, TSecond>>
+        where TFirst : notnull
+        where TFProvider : ISerializeProvider<TFirst>
+        where TSProvider : ISerializeProvider<TSecond>
+    {
+        public static ISerialize<MapPair<TFirst, TSecond>> Instance { get; } = 
+            new Ser<TFirst, TSecond, TFProvider, TSProvider>();
+
+        public ISerdeInfo SerdeInfo { get; } = new MapPairSerdeInfo<TFirst, TSecond>(
+            TFProvider.Instance.SerdeInfo,
+            TSProvider.Instance.SerdeInfo
+        );
+
+        private static readonly ITypeSerialize<TFirst> _firstSer = TypeSerialize.GetOrBox<TFirst, TFProvider>();
+        private static readonly ITypeSerialize<TSecond> _secondSer = TypeSerialize.GetOrBox<TSecond, TSProvider>();
+
+        public void Serialize(MapPair<TFirst, TSecond> value, ISerializer serializer)
+        {
+            var ser = serializer.WriteType(SerdeInfo);
+            _firstSer.Serialize(value.first, ser, SerdeInfo, 0);
+            _secondSer.Serialize(value.second, ser, SerdeInfo, 1);
+            ser.End(SerdeInfo);
+        }
+    }
+
     public sealed class De<TFirst, TSecond, TFProvider, TSProvider>
         : IDeserializeProvider<MapPair<TFirst, TSecond>>, IDeserialize<MapPair<TFirst, TSecond>>
         where TFirst : notnull

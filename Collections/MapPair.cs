@@ -1,6 +1,7 @@
-﻿using Serde;
+﻿using AssetParser.SerdeUtils.Map;
+using Serde;
 
-namespace AssetParser.SerdeUtils.Map;
+namespace AssetParser.Collections;
 
 [SerdeTypeOptions(Proxy = typeof(MapPairProxy))]
 internal readonly struct MapPair<TFirst, TSecond>(TFirst first, TSecond second)

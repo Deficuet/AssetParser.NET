@@ -1,4 +1,5 @@
-﻿using Serde;
+﻿using AssetParser.Collections;
+using Serde;
 using System.Reflection;
 using System.Text;
 
