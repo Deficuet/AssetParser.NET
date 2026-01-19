@@ -27,6 +27,10 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
                 return new ArrayTypeDeserializer(reader, rootNode.children[0]);
             }
         }
+        else if (typeInfo.Kind == InfoKind.Enum)
+        {
+            return new EnumTypeDeserializer(reader, rootNode);
+        }
         throw new TypeMismatchException(rootNode, typeInfo.Name);
     }
 

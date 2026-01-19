@@ -4,7 +4,7 @@ using System.Buffers;
 namespace AssetParser.SerdeUtils;
 
 [GenerateSerde(ForType = typeof(Guid), With = typeof(GuidProxy))]
-internal partial class GuidProxy : ISerdeProvider<Guid>, ISerde<Guid>
+public partial class GuidProxy : ISerdeProvider<Guid>, ISerde<Guid>
 {
     private static readonly GuidProxy s_instance = new();
     static ISerialize<Guid> ISerializeProvider<Guid>.Instance { get; } = s_instance;
