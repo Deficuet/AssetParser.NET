@@ -22,6 +22,7 @@ public enum NodeDataType: byte
     WideChar,
 
     Bool,
+    Guid,
 
     ByteArray,
     Typeless,

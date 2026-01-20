@@ -49,6 +49,11 @@ public static class NodeDataTypeHelper
         return node.type == "char" && node.children.Count == 0 && (node.byteSize == 1 || node.byteSize == 2);
     }
 
+    public static bool IsGuid(this TypeTreeNode node)
+    {
+        return node.type == "GUID" && node.byteSize == 16 && node.children.Count == 4;
+    }
+
     public static bool IsArray(this TypeTreeNode node)
     {
         if (node.children.Count != 1)
@@ -152,6 +157,10 @@ public static class NodeDataTypeHelper
         else if (node.IsPair())
         {
             return NodeDataType.Pair;
+        }
+        else if (node.IsGuid())
+        {
+            return NodeDataType.Guid;
         }
         else if (node.IsArray())
         {

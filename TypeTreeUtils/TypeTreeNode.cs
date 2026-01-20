@@ -89,6 +89,22 @@ public partial class TypeTreeNode
         return FinishRead(reader, reader.ReadUInt64());
     }
 
+    public UInt128 ReadUInt128(EndianBinaryReader reader)
+    {
+        var u64_1 = reader.ReadUInt64();
+        var u64_2 = reader.ReadUInt64();
+        UInt128 ret;
+        if (reader.Endian == EndianType.LittleEndian)
+        {
+            ret = (((UInt128)u64_2) << 64) | u64_1;
+        }
+        else
+        {
+            ret = (((UInt128)u64_1) << 64) | u64_2;
+        }
+        return FinishRead(reader, ret);
+    }
+
     public float ReadFloat(EndianBinaryReader reader)
     {
         return FinishRead(reader, reader.ReadSingle());
@@ -145,6 +161,10 @@ public partial class TypeTreeNode
     {
         if (DataType.IsPrimitiveType())
         {
+            if (byteSize == -1)
+            {
+                throw new InvalidDataException("Cannot skip primitive type with unknown size");
+            }
             reader.Position += byteSize;
             CheckAlignmentWith(reader);
         }

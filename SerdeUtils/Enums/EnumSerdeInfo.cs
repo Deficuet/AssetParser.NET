@@ -4,16 +4,17 @@ using System.Text;
 
 namespace AssetParser.SerdeUtils.Enums;
 
-internal class EnumSerdeInfo<E> : ISerdeInfo
-    where E : struct, Enum
+internal class EnumSerdeInfo : ISerdeInfo
 {
+    private readonly string _fullName;
     private readonly string[] _names;
     private readonly Dictionary<string, int> _nameIndexMap = [];
     private readonly ISerdeInfo _info;
 
-    public EnumSerdeInfo(ISerdeInfo underlyingInfo)
+    public EnumSerdeInfo(Type enumType, ISerdeInfo underlyingInfo)
     {
-        _names = Enum.GetNames<E>();
+        _fullName = enumType.FullName ?? enumType.Name;
+        _names = Enum.GetNames(enumType);
         for (int i = 0; i < _names.Length; ++i)
         {
             _nameIndexMap[_names[i]] = i;
@@ -21,7 +22,7 @@ internal class EnumSerdeInfo<E> : ISerdeInfo
         _info = underlyingInfo;
     }
 
-    public string Name { get; } = typeof(E).Name;
+    public string Name => _fullName;
 
     public InfoKind Kind => InfoKind.Enum;
 

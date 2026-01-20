@@ -97,7 +97,8 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
 
     public UInt128 ReadU128()
     {
-        throw new NotImplementedException();
+        CheckNode("Guid(UInt128)", rootNode.DataType == NodeDataType.Guid);
+        return rootNode.ReadUInt128(reader);
     }
 
     public float ReadF32()
@@ -149,6 +150,11 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
     {
         CheckNode("string", rootNode.DataType == NodeDataType.String);
         return rootNode.ReadString(reader);
+    }
+
+    public (int, string?) ReadEnumIndex(ISerdeInfo enumInfo)
+    {
+        return (ITypeDeserializer.NonApplicable, null);
     }
 
     public void Dispose()
