@@ -162,10 +162,6 @@ public static class NodeDataTypeHelper
         {
             return NodeDataType.Guid;
         }
-        else if (node.IsArray())
-        {
-            return NodeDataType.Array;
-        }
         else if (node.IsTypeless())
         {
             return NodeDataType.Typeless;
@@ -173,6 +169,10 @@ public static class NodeDataTypeHelper
         else if (node.IsByteArray())
         {
             return NodeDataType.ByteArray;
+        }
+        else if (node.IsArray())
+        {
+            return NodeDataType.Array;
         }
         else
         {

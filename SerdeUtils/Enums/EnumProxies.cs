@@ -13,10 +13,11 @@ public sealed class EnumValueProxy<E, N, NProvider>: ISerdeProvider<E>, ISerde<E
 
     static EnumValueProxy()
     {
-        if (typeof(N) != Enum.GetUnderlyingType(s_enumType))
+        var underlyingType = Enum.GetUnderlyingType(s_enumType);
+        if (typeof(N) != underlyingType)
         {
             throw new InvalidOperationException(
-                $"Type parameter {typeof(N).FullName} is not the underlying type of {s_enumType.FullName}"
+                $"Type {typeof(N).FullName} is not the underlying type of {s_enumType.FullName} ({underlyingType.FullName})"
             );
         }
     }
