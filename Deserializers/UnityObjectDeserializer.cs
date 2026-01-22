@@ -126,7 +126,7 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
         return rootNode.ReadChar(reader);
     }
 
-    public void ReadBytes(IBufferWriter<byte> writer)
+    public byte[] ReadBytes()
     {
         var arrayNode = rootNode.DataType switch
         {
@@ -139,7 +139,7 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
         {
             throw new TypeMismatchException(rootNode, elementNode, "byte[]");
         }
-        arrayNode.ReadBytes(reader, writer);
+        return arrayNode.ReadBytes(reader);
     }
 
     public string ReadString()

@@ -91,18 +91,7 @@ public partial class TypeTreeNode
 
     public UInt128 ReadUInt128(EndianBinaryReader reader)
     {
-        var u64_1 = reader.ReadUInt64();
-        var u64_2 = reader.ReadUInt64();
-        UInt128 ret;
-        if (reader.Endian == EndianType.LittleEndian)
-        {
-            ret = (((UInt128)u64_2) << 64) | u64_1;
-        }
-        else
-        {
-            ret = (((UInt128)u64_1) << 64) | u64_2;
-        }
-        return FinishRead(reader, ret);
+        return FinishRead(reader, reader.ReadUInt128());
     }
 
     public float ReadFloat(EndianBinaryReader reader)
@@ -131,13 +120,28 @@ public partial class TypeTreeNode
         return FinishRead(reader, c);
     }
 
-    public void ReadBytes(EndianBinaryReader reader, IBufferWriter<byte> writer)
+    public byte[] ReadBytes(EndianBinaryReader reader)
     {
         var sizeNode = children[0];
         var size = sizeNode.ReadInt(reader);
-        var buffer = writer.GetSpan(size);
-        reader.Read(buffer);
-        CheckAlignmentWith(reader);
+        if (size == 0)
+        {
+            return [];
+        }
+        var buffer = new byte[size];
+        reader.Read(buffer, 0, size);
+        return FinishRead(reader, buffer);
+    }
+
+    private static string ReadSpanString(EndianBinaryReader reader, Span<byte> span, int byteSize)
+    {
+        reader.Read(span);
+        return byteSize switch
+        {
+            1 => Encoding.UTF8.GetString(span),
+            2 => Encoding.Unicode.GetString(span),
+            _ => throw new NotSupportedException("Char of a string must be 1 or 2 bytes wide")
+        };
     }
 
     public string ReadString(EndianBinaryReader reader)
@@ -145,15 +149,30 @@ public partial class TypeTreeNode
         var sizeNode = children[0];
         var charNode = children[1];
         var size = sizeNode.ReadInt(reader);
-        var strByteSize = size * charNode.byteSize;
-        Span<byte> strBuf = stackalloc byte[strByteSize];
-        reader.Read(strBuf);
-        string ret = charNode.byteSize switch
+        if (size == 0)
         {
-            1 => Encoding.UTF8.GetString(strBuf),
-            2 => Encoding.Unicode.GetString(strBuf),
-            _ => throw new NotSupportedException("Char of a string must be 1 or 2 bytes wide")
-        };
+            return FinishRead(reader, "");
+        }
+        var strByteSize = size * charNode.byteSize;
+        string ret;
+        if (strByteSize <= 512)
+        {
+            Span<byte> strBuf = stackalloc byte[strByteSize];
+            ret = ReadSpanString(reader, strBuf, charNode.byteSize);
+        }
+        else
+        {
+            var rented = ArrayPool<byte>.Shared.Rent(strByteSize);
+            try
+            {
+                var strBuf = rented.AsSpan(0, strByteSize);
+                ret = ReadSpanString(reader, strBuf, charNode.byteSize);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(rented);
+            }
+        }
         return FinishRead(reader, ret);
     }
 

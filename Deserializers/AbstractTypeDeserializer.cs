@@ -139,7 +139,7 @@ internal abstract class AbstractTypeDeserializer : ITypeDeserializer
         return currentNode.ReadChar(reader);
     }
 
-    public void ReadBytes(ISerdeInfo info, int index, IBufferWriter<byte> writer)
+    public byte[] ReadBytes(ISerdeInfo info, int index)
     {
         var currentNode = GetCurrentNode(info, index);
         var arrayNode = currentNode.DataType switch
@@ -153,7 +153,7 @@ internal abstract class AbstractTypeDeserializer : ITypeDeserializer
         {
             throw new TypeMismatchException(currentNode, elementNode, info, index, "byte[]");
         }
-        arrayNode.ReadBytes(reader, writer);
+        return arrayNode.ReadBytes(reader);
     }
 
     public string ReadString(ISerdeInfo info, int index)

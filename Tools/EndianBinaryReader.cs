@@ -4,7 +4,6 @@ namespace AssetParser.Tools;
 
 public class EndianBinaryReader(Stream stream, EndianType endian = EndianType.BigEndian) : BinaryReader(stream)
 {
-    private readonly byte[] buffer = new byte[8];
     private readonly long offset = stream.Position;
 
     public EndianType Endian = endian;
@@ -29,8 +28,9 @@ public class EndianBinaryReader(Stream stream, EndianType endian = EndianType.Bi
     {
         if (Endian == EndianType.BigEndian)
         {
-            Read(buffer, 0, 2);
-            return BinaryPrimitives.ReadInt16BigEndian(buffer);
+            Span<byte> buf = stackalloc byte[sizeof(short)];
+            Read(buf);
+            return BinaryPrimitives.ReadInt16BigEndian(buf);
         }
         return base.ReadInt16();
     }
@@ -39,8 +39,9 @@ public class EndianBinaryReader(Stream stream, EndianType endian = EndianType.Bi
     {
         if (Endian == EndianType.BigEndian)
         {
-            Read(buffer, 0, 4);
-            return BinaryPrimitives.ReadInt32BigEndian(buffer);
+            Span<byte> buf = stackalloc byte[sizeof(int)];
+            Read(buf);
+            return BinaryPrimitives.ReadInt32BigEndian(buf);
         }
         return base.ReadInt32();
     }
@@ -49,18 +50,32 @@ public class EndianBinaryReader(Stream stream, EndianType endian = EndianType.Bi
     {
         if (Endian == EndianType.BigEndian)
         {
-            Read(buffer, 0, 8);
-            return BinaryPrimitives.ReadInt64BigEndian(buffer);
+            Span<byte> buf = stackalloc byte[sizeof(long)];
+            Read(buf);
+            return BinaryPrimitives.ReadInt64BigEndian(buf);
         }
         return base.ReadInt64();
+    }
+
+    public Int128 ReadInt128()
+    {
+        Span<byte> buf = stackalloc byte[16];
+        Read(buf);
+        return Endian switch
+        {
+            EndianType.BigEndian => BinaryPrimitives.ReadInt128BigEndian(buf),
+            EndianType.LittleEndian => BinaryPrimitives.ReadInt128LittleEndian(buf),
+            _ => throw new InvalidOperationException($"Undefined endianess {Endian}"),
+        };
     }
 
     public override ushort ReadUInt16()
     {
         if (Endian == EndianType.BigEndian)
         {
-            Read(buffer, 0, 2);
-            return BinaryPrimitives.ReadUInt16BigEndian(buffer);
+            Span<byte> buf = stackalloc byte[sizeof(ushort)];
+            Read(buf);
+            return BinaryPrimitives.ReadUInt16BigEndian(buf);
         }
         return base.ReadUInt16();
     }
@@ -69,8 +84,9 @@ public class EndianBinaryReader(Stream stream, EndianType endian = EndianType.Bi
     {
         if (Endian == EndianType.BigEndian)
         {
-            Read(buffer, 0, 4);
-            return BinaryPrimitives.ReadUInt32BigEndian(buffer);
+            Span<byte> buf = stackalloc byte[sizeof(uint)];
+            Read(buf);
+            return BinaryPrimitives.ReadUInt32BigEndian(buf);
         }
         return base.ReadUInt32();
     }
@@ -79,10 +95,23 @@ public class EndianBinaryReader(Stream stream, EndianType endian = EndianType.Bi
     {
         if (Endian == EndianType.BigEndian)
         {
-            Read(buffer, 0, 8);
-            return BinaryPrimitives.ReadUInt64BigEndian(buffer);
+            Span<byte> buf = stackalloc byte[sizeof(ulong)];
+            Read(buf);
+            return BinaryPrimitives.ReadUInt64BigEndian(buf);
         }
         return base.ReadUInt64();
+    }
+
+    public UInt128 ReadUInt128()
+    {
+        Span<byte> buf = stackalloc byte[16];
+        Read(buf);
+        return Endian switch
+        {
+            EndianType.BigEndian => BinaryPrimitives.ReadUInt128BigEndian(buf),
+            EndianType.LittleEndian => BinaryPrimitives.ReadUInt128LittleEndian(buf),
+            _ => throw new InvalidOperationException($"Undefined endianess {Endian}"),
+        };
     }
 
 #if NETFRAMEWORK
@@ -112,8 +141,9 @@ public class EndianBinaryReader(Stream stream, EndianType endian = EndianType.Bi
     {
         if (Endian == EndianType.BigEndian)
         {
-            Read(buffer, 0, 4);
-            return BinaryPrimitives.ReadSingleBigEndian(buffer);
+            Span<byte> buf = stackalloc byte[sizeof(float)];
+            Read(buf);
+            return BinaryPrimitives.ReadSingleBigEndian(buf);
         }
         return base.ReadSingle();
     }
@@ -122,8 +152,9 @@ public class EndianBinaryReader(Stream stream, EndianType endian = EndianType.Bi
     {
         if (Endian == EndianType.BigEndian)
         {
-            Read(buffer, 0, 8);
-            return BinaryPrimitives.ReadDoubleBigEndian(buffer);
+            Span<byte> buf = stackalloc byte[sizeof(double)];
+            Read(buf);
+            return BinaryPrimitives.ReadDoubleBigEndian(buf);
         }
         return base.ReadDouble();
     }
