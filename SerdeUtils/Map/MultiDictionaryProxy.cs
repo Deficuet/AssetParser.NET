@@ -5,7 +5,7 @@ namespace AssetParser.SerdeUtils.Map;
 
 public static class MultiDictionaryProxy
 {
-    public sealed class Ser<TK, TV, TKProvider, TVProvider>
+    public class Ser<TK, TV, TKProvider, TVProvider>
         : ISerializeProvider<MultiDictionary<TK, TV>>, ISerialize<MultiDictionary<TK, TV>>
         where TK : notnull 
         where TKProvider: ISerializeProvider<TK>
@@ -43,7 +43,7 @@ public static class MultiDictionaryProxy
         }
     }
 
-    public sealed class De<TK, TV, TKProvider, TVProvider>
+    public class De<TK, TV, TKProvider, TVProvider>
         : DeListBase<
             De<TK, TV, TKProvider, TVProvider>, 
             MapPair<TK, TV>,
