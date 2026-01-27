@@ -54,6 +54,11 @@ public static class NodeDataTypeHelper
         return node.type == "GUID" && node.byteSize == 16 && node.children.Count == 4;
     }
 
+    public static bool IsHash128(this TypeTreeNode node)
+    {
+        return node.type == "Hash128" && node.byteSize == 16 && node.children.Count == 16;
+    }
+
     public static bool IsArray(this TypeTreeNode node)
     {
         if (node.children.Count != 1)
@@ -162,6 +167,10 @@ public static class NodeDataTypeHelper
         {
             return NodeDataType.Guid;
         }
+        else if (node.IsHash128())
+        {
+            return NodeDataType.Hash128;
+        }
         else if (node.IsTypeless())
         {
             return NodeDataType.Typeless;
@@ -200,7 +209,12 @@ public static class NodeDataTypeHelper
         return type >= NodeDataType.Char && type < NodeDataType.Bool;
     }
 
-    public static bool IsPrimitiveType(this NodeDataType type)
+    public static bool IsUInt128BasedType(this NodeDataType type)
+    {
+        return type == NodeDataType.Guid || type == NodeDataType.Hash128;
+    }
+
+    public static bool IsValueType(this NodeDataType type)
     {
         return type <= NodeDataType.ByteArray;
     }

@@ -1,7 +1,7 @@
 ﻿using AssetParser.Collections;
 using Serde;
 
-namespace AssetParser.SerdeUtils.Map;
+namespace AssetParser.SerdeUtils.Collections;
 
 public static class MapPairProxy
 {

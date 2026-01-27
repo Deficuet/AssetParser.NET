@@ -178,11 +178,11 @@ public partial class TypeTreeNode
 
     public void Skip(EndianBinaryReader reader)
     {
-        if (DataType.IsPrimitiveType())
+        if (DataType.IsValueType())
         {
             if (byteSize == -1)
             {
-                throw new InvalidDataException("Cannot skip primitive type with unknown size");
+                throw new InvalidDataException("Cannot skip value type with unknown size");
             }
             reader.Position += byteSize;
             CheckAlignmentWith(reader);

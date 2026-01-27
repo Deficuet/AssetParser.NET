@@ -23,6 +23,7 @@ public enum NodeDataType: byte
 
     Bool,
     Guid,
+    Hash128,
 
     ByteArray,
     Typeless,

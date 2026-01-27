@@ -1,4 +1,4 @@
-﻿using AssetParser.SerdeUtils.Map;
+﻿using AssetParser.SerdeUtils.Collections;
 using Serde;
 
 namespace AssetParser.Collections;

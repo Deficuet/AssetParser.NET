@@ -3,7 +3,7 @@ using Serde;
 using System.Reflection;
 using System.Text;
 
-namespace AssetParser.SerdeUtils.Map;
+namespace AssetParser.SerdeUtils.Collections;
 
 internal class MapPairSerdeInfo<TFirst, TSecond>(ISerdeInfo firstInfo, ISerdeInfo secondInfo) : ISerdeInfo
 {

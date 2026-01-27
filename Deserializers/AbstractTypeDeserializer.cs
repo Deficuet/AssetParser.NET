@@ -107,7 +107,7 @@ internal abstract class AbstractTypeDeserializer : ITypeDeserializer
     public UInt128 ReadU128(ISerdeInfo info, int index)
     {
         var currentNode = GetCurrentNode(info, index);
-        CheckNode(currentNode, info, index, "Guid(UInt128)", currentNode.DataType == NodeDataType.Guid);
+        CheckNode(currentNode, info, index, "Guid/Hash128(UInt128)", currentNode.DataType.IsUInt128BasedType());
         return currentNode.ReadUInt128(reader);
     }
 

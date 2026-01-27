@@ -2,7 +2,6 @@
 using AssetParser.Tools;
 using AssetParser.TypeTreeUtils;
 using Serde;
-using System.Buffers;
 
 namespace AssetParser.Deserializers;
 
@@ -93,7 +92,7 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
 
     public UInt128 ReadU128()
     {
-        CheckNode("Guid(UInt128)", rootNode.DataType == NodeDataType.Guid);
+        CheckNode("Guid/Hash128(UInt128)", rootNode.DataType.IsUInt128BasedType());
         return rootNode.ReadUInt128(reader);
     }
 
