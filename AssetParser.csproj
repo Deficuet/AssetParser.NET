@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Deficuet.$(AssemblyName)</PackageId>
     <Title>Deficuet.AssetParser</Title>
-    <Version>0.1.0-alpha.14</Version>
+    <Version>0.1.0-alpha.15</Version>
     <Authors>Deficuet</Authors>
     <Company />
     <Description>An Unity object data reader driven by the type tree and generated deserializer. Neither specialized deserialization logics nor runtime reflection are required.</Description>
@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Deficuet.Serde" Version="0.10.1-alpha.4" />
+    <PackageReference Include="Deficuet.Serde" Version="0.10.1-alpha.5" />
   </ItemGroup>
 
   <ItemGroup>
