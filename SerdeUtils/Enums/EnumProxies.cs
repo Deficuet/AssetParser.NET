@@ -7,7 +7,7 @@ namespace AssetParser.SerdeUtils.Enums;
 public sealed class EnumValueProxy<E, N, NProvider>: ISerdeProvider<E>, ISerde<E>
     where E : struct, Enum
     where N : unmanaged, IConvertible
-    where NProvider: ISerdeProvider<NProvider, NProvider, N>, ISerde<N>
+    where NProvider: ISerde<N>, ISerializeProvider<N>, IDeserializeProvider<N>
 {
     private static readonly EnumValueProxy<E, N, NProvider> s_instance = new();
     static ISerialize<E> ISerializeProvider<E>.Instance => s_instance;
@@ -33,7 +33,7 @@ public sealed class EnumValueProxy<E, N, NProvider>: ISerdeProvider<E>, ISerde<E
         }
         s_values = Enum.GetValues(enumType) as E[]
             ?? throw new InvalidOperationException($"Failed to get enum values for enum type {enumType.FullName}");
-        s_serdeInfo = new EnumSerdeInfo(enumType, NProvider.Instance.SerdeInfo);
+        s_serdeInfo = new EnumSerdeInfo(enumType, SerdeInfoProvider.GetSerializeInfo<N, NProvider>());
     }
 
     public ISerdeInfo SerdeInfo => s_serdeInfo;
