@@ -149,6 +149,8 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
 
     public bool TryReadGuid(out Guid guid)
     {
+        CheckNode("GUID", rootNode.IsGuid());
+        // delegate to proxy
         guid = default!;
         return false;
     }
