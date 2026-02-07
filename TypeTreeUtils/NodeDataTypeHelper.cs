@@ -163,10 +163,6 @@ public static class NodeDataTypeHelper
         {
             return NodeDataType.Pair;
         }
-        else if (node.IsGuid())
-        {
-            return NodeDataType.Guid;
-        }
         else if (node.IsHash128())
         {
             return NodeDataType.Hash128;
@@ -211,7 +207,7 @@ public static class NodeDataTypeHelper
 
     public static bool IsUInt128BasedType(this NodeDataType type)
     {
-        return type == NodeDataType.Guid || type == NodeDataType.Hash128;
+        return type == NodeDataType.Hash128;
     }
 
     public static bool IsValueType(this NodeDataType type)

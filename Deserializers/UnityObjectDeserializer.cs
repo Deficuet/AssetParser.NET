@@ -92,7 +92,7 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
 
     public UInt128 ReadU128()
     {
-        CheckNode("Guid/Hash128(UInt128)", rootNode.DataType.IsUInt128BasedType());
+        CheckNode("Hash128(UInt128)", rootNode.DataType.IsUInt128BasedType());
         return rootNode.ReadUInt128(reader);
     }
 
@@ -145,6 +145,12 @@ public class UnityObjectDeserializer(EndianBinaryReader reader, TypeTreeNode roo
     {
         CheckNode("string", rootNode.DataType == NodeDataType.String);
         return rootNode.ReadString(reader);
+    }
+
+    public bool TryReadGuid(out Guid guid)
+    {
+        guid = default!;
+        return false;
     }
 
     public (int, string?) ReadEnumIndex(ISerdeInfo enumInfo)

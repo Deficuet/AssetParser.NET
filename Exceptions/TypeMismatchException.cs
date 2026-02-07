@@ -18,7 +18,7 @@ public class TypeMismatchException: Exception
 
     internal TypeMismatchException(TypeTreeNode node, ISerdeInfo serdeInfo, int index, string typeDesc): 
         base(
-            $"In class {serdeInfo.Name} field {serdeInfo.GetFieldStringName(index)}" +
+            $"In class {serdeInfo.Name} field {serdeInfo.GetFieldStringName(index)} " +
             $"requires <{typeDesc}> but the node {node.name}({node.type}) is {node.DataType}."
         )
     { }
@@ -27,7 +27,7 @@ public class TypeMismatchException: Exception
         TypeTreeNode node, TypeTreeNode elementNode, 
         ISerdeInfo serdeInfo, int index, string typeDesc
     ) : base(
-            $"In class {serdeInfo.Name} field {serdeInfo.GetFieldStringName(index)}" +
+            $"In class {serdeInfo.Name} field {serdeInfo.GetFieldStringName(index)} " +
             $"requires <{typeDesc}> but the node {node.name}({node.type}) is {node.DataType} " +
             $"with element {elementNode.DataType}"
         )
