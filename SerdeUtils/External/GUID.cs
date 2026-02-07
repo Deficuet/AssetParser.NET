@@ -48,3 +48,17 @@ public class GuidProxy : ISerde<Guid>, ISerdeProvider<Guid>
         return De.Deserialize(deserializer);
     }
 }
+
+public class GuidStringSerProxy : ISerialize<Guid>, ISerializeProvider<Guid>
+{
+    private static readonly GuidStringSerProxy s_instance = new();
+    public static ISerialize<Guid> Instance => s_instance;
+
+    private static readonly ISerdeInfo s_serdeInfo = Serde.SerdeInfo.MakePrimitive(typeof(Guid).FullName!, PrimitiveKind.String);
+    public ISerdeInfo SerdeInfo => s_serdeInfo;
+
+    public void Serialize(Guid value, ISerializer serializer)
+    {
+        serializer.WriteString(value.ToString());
+    }
+}
